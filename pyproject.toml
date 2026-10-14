@@ -26,6 +26,9 @@ dependencies = [
   "pikepdf>=8",
 ]
 
+[project.optional-dependencies]
+layout = ["paddleocr>=3,<4", "paddlepaddle>=3,<4", "pypdfium2>=4"]
+
 # ocrmypdf and tesseract are invoked as external commands, not imported, so they
 # are deliberately not Python dependencies: the whiten and fast passes work
 # without them.
@@ -35,6 +38,7 @@ Homepage = "https://github.com/dragonleopardpig/pdf-prep"
 
 [project.scripts]
 pdf-prep = "pdf_prep:main"
+pdf-prep-regions = "pdf_prep_regions:main"
 
 [tool.setuptools]
-py-modules = ["pdf_prep"]
+py-modules = ["pdf_prep", "pdf_prep_edges", "pdf_prep_regions"]

@@ -10,7 +10,14 @@
     in
     {
       packages = forAll (pkgs: rec {
-        pdf-prep = pkgs.writeShellApplication {
+        pdf-prep = let
+          scripts = pkgs.runCommand "pdf-prep-scripts" {} ''
+            mkdir -p "$out"
+            cp ${./pdf_prep.py} "$out/pdf_prep.py"
+            cp ${./pdf_prep_edges.py} "$out/pdf_prep_edges.py"
+            cp ${./pdf_prep_regions.py} "$out/pdf_prep_regions.py"
+          '';
+        in pkgs.writeShellApplication {
           name = "pdf-prep";
           runtimeInputs = [
             (pkgs.python3.withPackages (ps: with ps; [ pymupdf numpy pillow pikepdf ]))
@@ -19,7 +26,7 @@
             pkgs.tesseract
           ];
           text = ''
-            exec python3 ${./pdf_prep.py} "$@"
+            exec python3 ${scripts}/pdf_prep.py "$@"
           '';
         };
         default = pdf-prep;
